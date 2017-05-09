@@ -1,7 +1,12 @@
 package com.mars.model;
 
-public class Greeting {
+import com.fasterxml.jackson.annotation.JsonProperty;
+import io.swagger.annotations.ApiModelProperty;
 
+/**
+ * Created by tachen on 2017/5/9.
+ */
+public class Greeting {
     private final long id;
     private final String content;
 
@@ -14,6 +19,8 @@ public class Greeting {
         return id;
     }
 
+    @JsonProperty(required = true)
+    @ApiModelProperty(notes = "The name of the user", required = true)
     public String getContent() {
         return content;
     }
