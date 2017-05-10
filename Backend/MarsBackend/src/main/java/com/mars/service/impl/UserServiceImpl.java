@@ -3,7 +3,6 @@ package com.mars.service.impl;
 import com.mars.dao.UserRepository;
 import com.mars.dao.entity.User;
 import com.mars.exception.MarsException;
-import com.mars.exception.RestResponseEntityExceptionHandler;
 import com.mars.model.UserInfo;
 import com.mars.service.UserService;
 
@@ -20,7 +19,7 @@ import org.springframework.stereotype.Service;
 @Service
 public class UserServiceImpl implements UserService {
     private static final Logger logger =
-        LoggerFactory.getLogger(RestResponseEntityExceptionHandler.class);
+        LoggerFactory.getLogger(UserServiceImpl.class);
 
     @Autowired
     private UserRepository userRepository;
