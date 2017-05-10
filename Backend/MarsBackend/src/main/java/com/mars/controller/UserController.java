@@ -15,11 +15,12 @@ import org.springframework.web.bind.annotation.*;
  * Created by tachen on 5/9/2017.
  */
 @RestController
+@RequestMapping(path="/user")
 public class UserController {
     @Autowired
     private UserRepository userRepository;
 
-    @RequestMapping(method = RequestMethod.POST, path = "/user")
+    @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "Get Person", notes = "Create a new user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = UserInfo.class),
@@ -33,6 +34,7 @@ public class UserController {
         user.setName(userInfo.getName());
         user.setEmail(userInfo.getEmail());
         user.setPhone(userInfo.getPhone());
+        user.setPassword(userInfo.getPassword());
         userRepository.save(user);
         return user;
 

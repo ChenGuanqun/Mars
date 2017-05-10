@@ -1,8 +1,10 @@
 package com.mars.dao.entity;
 
+import org.hibernate.annotations.GenericGenerator;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
 import javax.persistence.Id;
 
 /**
@@ -12,8 +14,10 @@ import javax.persistence.Id;
 @Entity
 public class User {
     @Id
-    @GeneratedValue(strategy= GenerationType.AUTO)
-    private Integer id;
+    @GeneratedValue(generator = "guid")
+    @GenericGenerator(name = "guid", strategy = "guid")
+    @Column(name = "id", unique = true)
+    private String id;
 
     private String name;
 
@@ -21,11 +25,13 @@ public class User {
 
     private String phone;
 
-    public Integer getId() {
+    private String password;
+
+    public String getId() {
         return id;
     }
 
-    public void setId(Integer id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -51,5 +57,13 @@ public class User {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getPassword() {
+        return password;
+    }
+
+    public void setPassword(String password) {
+        this.password = password;
     }
 }
