@@ -19,10 +19,13 @@ public class User {
     @Column(name = "id", unique = true)
     private String id;
 
+    @Column(name = "name", unique = true)
     private String name;
 
+    @Column(name = "email", unique = true)
     private String email;
 
+    @Column(name = "phone", unique = true)
     private String phone;
 
     private String password;

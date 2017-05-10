@@ -1,4 +1,4 @@
-package com.mars.model;
+package com.mars.dao;
 
 import com.mars.dao.entity.User;
 
