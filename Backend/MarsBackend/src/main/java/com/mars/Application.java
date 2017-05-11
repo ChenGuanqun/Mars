@@ -1,7 +1,9 @@
 package com.mars;
 
+import com.mars.filter.AuthenticatedFilter;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.web.servlet.FilterRegistrationBean;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -18,7 +20,7 @@ import com.google.common.base.Predicates;
 
 @SpringBootApplication
 @EnableSwagger2
-@ComponentScan("com.mars.*")
+//@ComponentScan("com.mars.*")
 public class Application {
 
     public static void main(String[] args) {
@@ -48,4 +50,14 @@ public class Application {
             .build();
     }
 
+    /*@Bean
+    public FilterRegistrationBean myFilterBean() {
+        final FilterRegistrationBean filterRegBean = new FilterRegistrationBean();
+        filterRegBean.setFilter(new AuthenticatedFilter());
+        filterRegBean.addUrlPatterns("/api/private/*");
+        //filterRegBean.setEnabled(Boolean.TRUE);
+        //filterRegBean.setName("AuthenticatedFilter");
+        //filterRegBean.setOrder(1);
+        return filterRegBean;
+    }*/
 }

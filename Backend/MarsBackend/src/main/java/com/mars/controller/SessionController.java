@@ -16,7 +16,7 @@ import io.swagger.annotations.ApiResponses;
  * Created by tachen on 5/10/2017.
  */
 @RestController
-@RequestMapping(path = "/session")
+@RequestMapping(path = "/public/session")
 public class SessionController {
 
     @RequestMapping(method = RequestMethod.POST)
