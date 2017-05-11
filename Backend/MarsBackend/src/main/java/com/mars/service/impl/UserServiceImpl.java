@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -30,7 +31,7 @@ public class UserServiceImpl implements UserService {
         user.setName(userInfo.getName());
         user.setEmail(userInfo.getEmail());
         user.setPhone(userInfo.getPhone());
-        user.setPassword(userInfo.getPassword());
+        user.setPassword(new BCryptPasswordEncoder().encode(userInfo.getPassword()));
         try{
             userRepository.save(user);
         }catch (Exception e){
