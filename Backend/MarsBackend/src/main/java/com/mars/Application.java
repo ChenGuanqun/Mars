@@ -1,7 +1,8 @@
 package com.mars;
 
-import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.boot.builder.SpringApplicationBuilder;
+import org.springframework.boot.web.support.SpringBootServletInitializer;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 
@@ -19,33 +20,34 @@ import com.google.common.base.Predicates;
 @SpringBootApplication
 @EnableSwagger2
 @ComponentScan("com.mars.*")
-public class Application {
+public class Application extends SpringBootServletInitializer {
+
+    /*public static void main(String[] args) {
+        SpringApplication.run(Application.class, args);
+    }*/
 
     public static void main(String[] args) {
-        SpringApplication.run(Application.class, args);
+        new Application()
+                .configure(new SpringApplicationBuilder(Application.class))
+                .run(args);
     }
 
     @Bean
     public Docket newsApi() {
         return new Docket(DocumentationType.SWAGGER_2)
-            .groupName("mars")
-            .apiInfo(apiInfo())
-            .select()
-            .apis(RequestHandlerSelectors.any())
-            .paths(Predicates.not(PathSelectors.regex("/error.*")))
-            .build();
+                .groupName("mars")
+                .apiInfo(apiInfo())
+                .select()
+                .apis(RequestHandlerSelectors.any())
+                .paths(Predicates.not(PathSelectors.regex("/error.*")))
+                .build();
     }
 
     private ApiInfo apiInfo() {
         return new ApiInfoBuilder()
-            .title("Mars Restful APIs")
-            .description("Mars Restful APIs")
-            //.termsOfServiceUrl("http://www-03.ibm.com/software/sla/sladb.nsf/sla/bm?Open")
-            //.contact("Tao Chen")
-            //.license("Apache License Version 2.0")
-            //.licenseUrl("https://github.com/IBM-Bluemix/news-aggregator/blob/master/LICENSE")
-            //.version("2.0")
-            .build();
+                .title("Mars Restful APIs")
+                .description("Mars Restful APIs")
+                .build();
     }
 
 }

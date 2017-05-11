@@ -2,6 +2,7 @@ package com.mars.controller;
 
 import com.mars.model.UserInfo;
 
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.RequestHeader;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
@@ -12,14 +13,17 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
+
 /**
  * Created by tachen on 5/10/2017.
  */
-@RestController
-@RequestMapping(path = "/session")
-public class SessionController {
+@Component
+@Path("/session")
+public class SessionResource {
 
-    @RequestMapping(method = RequestMethod.POST)
+    @POST
     @ApiOperation(value = "User Admin Operations", notes = "Create a new user")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success", response = UserInfo.class),

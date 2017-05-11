@@ -11,19 +11,23 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Component;
 import org.springframework.web.bind.annotation.*;
+
+import javax.ws.rs.POST;
+import javax.ws.rs.Path;
 
 /**
  * Created by tachen on 5/9/2017.
  */
-@RestController
-@RequestMapping(path="/user")
-public class UserController {
+@Component
+@Path("/user")
+public class UserResource {
 
     @Autowired
     private UserService userService;
 
-    @RequestMapping(method = RequestMethod.POST)
+    @POST
     @ApiOperation(value = "User Admin Operations", notes = "Create a new user")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "Success", response = UserInfo.class),
