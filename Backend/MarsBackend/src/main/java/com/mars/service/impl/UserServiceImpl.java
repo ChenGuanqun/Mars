@@ -1,7 +1,7 @@
 package com.mars.service.impl;
 
 import com.mars.dao.UserRepository;
-import com.mars.dao.entity.User;
+import com.mars.dao.entity.UserEntity;
 import com.mars.exception.MarsException;
 import com.mars.model.UserInfo;
 import com.mars.service.UserService;
@@ -29,8 +29,8 @@ public class UserServiceImpl implements UserService {
     private UserRepository userRepository;
 
     @Override
-    public User createUser(UserInfo userInfo) throws MarsException {
-        User user = new User();
+    public UserEntity createUser(UserInfo userInfo) throws MarsException {
+        UserEntity user = new UserEntity();
         user.setName(userInfo.getName());
         user.setEmail(userInfo.getEmail());
         user.setPhone(userInfo.getPhone());
@@ -45,12 +45,15 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public boolean userLogon(String name, String password) throws MarsException {
-        User user = userRepository.findByName(name);
+    public UserEntity userLogon(String name, String password) throws MarsException {
+        UserEntity user = userRepository.findByName(name);
+        if(user == null){
+            throw new MarsException(HttpStatus.NOT_FOUND, "User name not found!");
+        }
         if(passwordEncoder.matches(password, user.getPassword())){
-            return true;
+            return user;
         }else{
-            return false;
+            throw new MarsException(HttpStatus.UNAUTHORIZED, "User name and password does not match!");
         }
     }
 }

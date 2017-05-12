@@ -8,27 +8,25 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 
 /**
- * Created by tachen on 5/9/2017.
+ * Created by tachen on 5/12/2017.
  */
-
 @Entity
-public class User {
+public class ActivityEntity {
+
     @Id
     @GeneratedValue(generator = "guid")
     @GenericGenerator(name = "guid", strategy = "guid")
     @Column(name = "id", unique = true)
     private String id;
 
-    @Column(name = "name", unique = true)
+    @Column(name = "name")
     private String name;
 
-    @Column(name = "email", unique = true)
-    private String email;
+    @Column(name = "userId")
+    private String userId;
 
-    @Column(name = "phone", unique = true)
-    private String phone;
-
-    private String password;
+    @Column(name = "description")
+    private String description;
 
     public String getId() {
         return id;
@@ -46,27 +44,19 @@ public class User {
         this.name = name;
     }
 
-    public String getEmail() {
-        return email;
+    public String getUserId() {
+        return userId;
     }
 
-    public void setEmail(String email) {
-        this.email = email;
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 
-    public String getPhone() {
-        return phone;
+    public String getDescription() {
+        return description;
     }
 
-    public void setPhone(String phone) {
-        this.phone = phone;
-    }
-
-    public String getPassword() {
-        return password;
-    }
-
-    public void setPassword(String password) {
-        this.password = password;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

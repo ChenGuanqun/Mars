@@ -27,7 +27,7 @@ public class AuthenticatedFilter implements Filter {
     private HttpSession httpSession;
 
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
-        Arrays.asList("/api", "/api/user", "/api/user/session")));
+        Arrays.asList("/api", "/api/users", "/api/users/session")));
 
     @Override
     public void init(FilterConfig filterConfig) throws ServletException {

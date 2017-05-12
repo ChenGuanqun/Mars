@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
  * Created by tachen on 2017/5/12.
  */
 @RestController
-@RequestMapping(path = "/api/subscription")
+@RequestMapping(path = "/api/subscriptions")
 public class SubscriptionController   {
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "User Admin Operations", notes = "Create a new user")

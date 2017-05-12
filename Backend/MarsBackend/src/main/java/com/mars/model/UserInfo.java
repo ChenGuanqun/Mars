@@ -1,15 +1,19 @@
 package com.mars.model;
 
+import javax.validation.constraints.NotNull;
+
 /**
  * Created by tachen on 2017/5/9.
  */
 public class UserInfo {
+    @NotNull
     private String name;
 
     private String email;
 
     private String phone;
 
+    @NotNull
     private String password;
 
     public String getName() {
