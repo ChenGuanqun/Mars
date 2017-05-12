@@ -3,6 +3,7 @@ package com.mars.service;
 import com.mars.dao.entity.ActivityEntity;
 import com.mars.exception.MarsException;
 import com.mars.model.ActivityInfo;
+import com.mars.model.ActivityUpdateInfo;
 
 import java.util.List;
 
@@ -14,4 +15,8 @@ public interface ActivityService {
     ActivityEntity createActivity(ActivityInfo activityInfo) throws MarsException;
 
     List<ActivityEntity> getAllActivities(String userId) throws  MarsException;
+
+    ActivityEntity updateActivity(ActivityUpdateInfo activityUpdateInfo) throws MarsException;
+
+    ActivityEntity deleteActivity(String activityId, String currentUserId) throws MarsException;
 }

@@ -62,6 +62,7 @@ public class UserController {
         String token = (new BigInteger(130, random)).toString(32);
         HttpSession httpSession = request.getSession();
         httpSession.setAttribute(ParamConstants.SESSION_ID, token);
+        httpSession.setAttribute(ParamConstants.CURRENT_USER_ID,userEntity.getId());
         response.setHeader(ParamConstants.X_AUTHENTICATED_TOKEN, token);
         return userEntity;
     }

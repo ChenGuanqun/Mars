@@ -13,4 +13,7 @@ import java.util.List;
 public interface UserRepository extends CrudRepository<UserEntity, Long> {
     @Query("select u from #{#entityName} u where u.name = ?1")
     UserEntity findByName(String name);
+
+    @Query("select u from #{#entityName} u where u.id = ?1")
+    UserEntity findById(String id);
 }

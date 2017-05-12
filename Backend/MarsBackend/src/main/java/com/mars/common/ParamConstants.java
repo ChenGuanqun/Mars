@@ -5,7 +5,11 @@ package com.mars.common;
  */
 public interface ParamConstants {
 
-   final String X_AUTHENTICATED_TOKEN = "X-Authenticated-Token";
+    String X_AUTHENTICATED_TOKEN = "X-Authenticated-Token";
 
-   final String SESSION_ID = "Mars-Session-ID";
+    String SESSION_ID = "Mars-Session-ID";
+
+    String CURRENT_USER_ID= "Current-User_ID";
+
+
 }
