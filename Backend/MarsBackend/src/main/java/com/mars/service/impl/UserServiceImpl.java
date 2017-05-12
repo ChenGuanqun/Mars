@@ -39,4 +39,14 @@ public class UserServiceImpl implements UserService {
         }
         return user;
     }
+
+    @Override
+    public boolean userLogon(String name, String password) throws MarsException {
+        User user = userRepository.findByName(name);
+        if(user.getPassword().equals(password)){
+            return true;
+        }else{
+            return false;
+        }
+    }
 }

@@ -1,5 +1,6 @@
 package com.mars.controller;
 
+import com.mars.common.ParamConstants;
 import com.mars.model.UserInfo;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
@@ -10,8 +11,8 @@ import org.springframework.web.bind.annotation.*;
  * Created by tachen on 2017/5/12.
  */
 @RestController
-@RequestMapping(path = "/private/subscription")
-public class Subscription {
+@RequestMapping(path = "/api/subscription")
+public class SubscriptionController   {
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "User Admin Operations", notes = "Create a new user")
     @ApiResponses(value = {
@@ -22,7 +23,7 @@ public class Subscription {
             @ApiResponse(code = 500, message = "Failure") })
     public
     @ResponseBody
-    String addNewUser(@RequestHeader(value="X-Authenticated-Token") String token) {
+    String createSubscription(@RequestHeader(value= ParamConstants.X_AUTHENTICATED_TOKEN) String token) {
 
         return "It is ok : "+ token;
 

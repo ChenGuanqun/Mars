@@ -11,4 +11,6 @@ import com.mars.model.UserInfo;
 public interface UserService {
     User createUser(UserInfo userInfo) throws MarsException;
 
+    boolean userLogon(String name, String password) throws MarsException;
+
 }
