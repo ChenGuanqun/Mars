@@ -23,8 +23,6 @@ import java.util.Set;
 @WebFilter(urlPatterns = { "/api/*" }, description = "Session Checker Filter")
 public class AuthenticatedFilter implements Filter {
 
-    @Autowired
-    private HttpSession httpSession;
 
     private static final Set<String> ALLOWED_PATHS = Collections.unmodifiableSet(new HashSet<>(
         Arrays.asList("/api", "/api/users", "/api/users/session")));
@@ -46,7 +44,8 @@ public class AuthenticatedFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             String token = request.getHeader(ParamConstants.X_AUTHENTICATED_TOKEN);
-            String sessionId = (String) httpSession.getServletContext().getAttribute(ParamConstants.SESSION_ID);
+            HttpSession httpSession = request.getSession();
+            String sessionId = (String) httpSession.getAttribute(ParamConstants.SESSION_ID);
             if (StringUtils.isEmpty(token) || !token.equals(sessionId)) {
                 response.reset();
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"The token is invalid, it may be expired!");

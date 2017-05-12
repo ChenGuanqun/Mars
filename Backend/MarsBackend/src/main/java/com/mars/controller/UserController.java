@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.*;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
@@ -25,15 +26,10 @@ import javax.servlet.http.HttpSession;
  */
 @RestController
 @RequestMapping(path = "/api/users")
-public class UserController  {
+public class UserController {
 
     private static SecureRandom random = new SecureRandom();
 
-    @Autowired
-    private HttpSession httpSession;
-
-    @Autowired
-    private HttpServletResponse servletResponse;
 
     @Autowired
     private UserService userService;
@@ -41,11 +37,11 @@ public class UserController  {
     @RequestMapping(method = RequestMethod.POST)
     @ApiOperation(value = "User Admin Operations", notes = "Create a new user")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = UserEntity.class),
-        @ApiResponse(code = 401, message = "Unauthorized"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
-        @ApiResponse(code = 500, message = "Failure") })
+            @ApiResponse(code = 200, message = "Success", response = UserEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
     public UserEntity addNewUser(@RequestBody UserInfo userInfo) throws MarsException {
         return userService.createUser(userInfo);
     }
@@ -53,20 +49,20 @@ public class UserController  {
     @RequestMapping(method = RequestMethod.POST, path = "/session")
     @ApiOperation(value = "Create a user session", notes = "Create a user session")
     @ApiResponses(value = {
-        @ApiResponse(code = 200, message = "Success", response = UserEntity.class),
-        @ApiResponse(code = 401, message = "Unauthorized"),
-        @ApiResponse(code = 403, message = "Forbidden"),
-        @ApiResponse(code = 404, message = "Not Found"),
-        @ApiResponse(code = 500, message = "Failure") })
+            @ApiResponse(code = 200, message = "Success", response = UserEntity.class),
+            @ApiResponse(code = 401, message = "Unauthorized"),
+            @ApiResponse(code = 403, message = "Forbidden"),
+            @ApiResponse(code = 404, message = "Not Found"),
+            @ApiResponse(code = 500, message = "Failure")})
     public
     @ResponseBody
-    UserEntity createSession(@RequestHeader(value = "USER-NAME") String userName, @RequestHeader(value = "PASSWORD") String password)
-        throws MarsException
-    {
+    UserEntity createSession(@RequestHeader(value = "USER-NAME") String userName, @RequestHeader(value = "PASSWORD") String password, HttpServletRequest request, HttpServletResponse response)
+            throws MarsException {
         UserEntity userEntity = userService.userLogon(userName, password);
         String token = (new BigInteger(130, random)).toString(32);
-        httpSession.getServletContext().setAttribute(ParamConstants.SESSION_ID, token);
-        servletResponse.setHeader(ParamConstants.X_AUTHENTICATED_TOKEN,token);
+        HttpSession httpSession = request.getSession();
+        httpSession.setAttribute(ParamConstants.SESSION_ID, token);
+        response.setHeader(ParamConstants.X_AUTHENTICATED_TOKEN, token);
         return userEntity;
     }
 }
