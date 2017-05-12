@@ -10,6 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 /**
@@ -18,8 +19,11 @@ import org.springframework.stereotype.Service;
 
 @Service
 public class UserServiceImpl implements UserService {
+
     private static final Logger logger =
         LoggerFactory.getLogger(UserServiceImpl.class);
+
+    BCryptPasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
 
     @Autowired
     private UserRepository userRepository;
@@ -30,7 +34,7 @@ public class UserServiceImpl implements UserService {
         user.setName(userInfo.getName());
         user.setEmail(userInfo.getEmail());
         user.setPhone(userInfo.getPhone());
-        user.setPassword(userInfo.getPassword());
+        user.setPassword(passwordEncoder.encode(userInfo.getPassword()));
         try{
             userRepository.save(user);
         }catch (Exception e){
@@ -43,7 +47,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public boolean userLogon(String name, String password) throws MarsException {
         User user = userRepository.findByName(name);
-        if(user.getPassword().equals(password)){
+        if(passwordEncoder.matches(password, user.getPassword())){
             return true;
         }else{
             return false;
