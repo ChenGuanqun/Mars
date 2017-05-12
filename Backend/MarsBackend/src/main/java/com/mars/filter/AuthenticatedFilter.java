@@ -49,7 +49,7 @@ public class AuthenticatedFilter implements Filter {
             String sessionId = (String) httpSession.getServletContext().getAttribute(ParamConstants.SESSION_ID);
             if (StringUtils.isEmpty(token) || !token.equals(sessionId)) {
                 response.reset();
-                response.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"The token is invalid, it may be expired!");
             }else {
                 filterChain.doFilter(servletRequest, servletResponse);
             }

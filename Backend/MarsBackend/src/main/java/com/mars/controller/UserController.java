@@ -15,7 +15,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.UUID;
+import java.math.BigInteger;
+import java.security.SecureRandom;
 
 import javax.servlet.http.HttpSession;
 
@@ -25,6 +26,8 @@ import javax.servlet.http.HttpSession;
 @RestController
 @RequestMapping(path = "/api/user")
 public class UserController  {
+
+    private static SecureRandom random = new SecureRandom();
 
     @Autowired
     private HttpSession httpSession;
@@ -59,7 +62,7 @@ public class UserController  {
     {
         String token = null;
         if (userService.userLogon(userName, password)) {
-            token = UUID.randomUUID().toString();
+            token = (new BigInteger(130, random)).toString(32);
             httpSession.getServletContext().setAttribute(ParamConstants.SESSION_ID, token);
         } else {
             throw new MarsException(HttpStatus.UNAUTHORIZED, "User name and password does not match!");
