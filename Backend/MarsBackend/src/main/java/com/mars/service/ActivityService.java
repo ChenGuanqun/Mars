@@ -19,4 +19,6 @@ public interface ActivityService {
     ActivityEntity updateActivity(ActivityUpdateInfo activityUpdateInfo) throws MarsException;
 
     ActivityEntity deleteActivity(String activityId, String currentUserId) throws MarsException;
+
+    ActivityEntity getActivity(String activityId, String currentUserId) throws MarsException;
 }

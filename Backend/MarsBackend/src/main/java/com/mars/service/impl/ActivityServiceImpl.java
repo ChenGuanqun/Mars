@@ -78,6 +78,19 @@ public class ActivityServiceImpl implements ActivityService {
             activityRepository.deleteById(activityId);
         }
 
-        return null;
+        return activityEntity;
+    }
+
+    @Override
+    public ActivityEntity getActivity(String activityId, String currentUserId) throws MarsException {
+
+        ActivityEntity activityEntity = activityRepository.findById(activityId);
+        if (activityEntity == null) {
+            throw new MarsException(HttpStatus.NOT_FOUND, "Activity not found Id " + activityId + " ,please pass valid activity id!");
+        }
+        if (!activityEntity.getUserId().equals(currentUserId)) {
+            throw new MarsException(HttpStatus.UNAUTHORIZED, "You don not have access to delete this due to userId passed does not match current user!");
+        }
+        return activityEntity;
     }
 }
