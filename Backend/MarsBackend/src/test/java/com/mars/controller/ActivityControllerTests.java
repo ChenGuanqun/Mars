@@ -48,10 +48,9 @@ import java.security.SecureRandom;
 
 @RunWith(SpringJUnit4ClassRunner.class)
 @SpringBootTest
-@ComponentScan("com.mars.*")
 @AutoConfigureMockMvc
 @FixMethodOrder(MethodSorters.NAME_ASCENDING)
-public class UserControllerTests {
+public class ActivityControllerTests {
 
     @Autowired
     private MockMvc mockMvc;
