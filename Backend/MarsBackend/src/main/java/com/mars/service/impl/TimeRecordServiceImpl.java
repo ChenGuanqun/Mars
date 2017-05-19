@@ -9,6 +9,7 @@ import com.mars.service.TimeRecordService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 
@@ -32,31 +33,28 @@ public class TimeRecordServiceImpl implements TimeRecordService {
 
     @Override
     public TimeRecordEntity updateEndTimeRecord(String timeRecordId, Date endTime) throws MarsException {
-//        TimeRecordEntity recordEntity = timeRecordRepository.findById(timeRecordId);
-//        if (recordEntity == null) {
-//            throw new MarsException(HttpStatus.NOT_FOUND, "Object not found for id " + timeRecordId);
-//        }
+        if (!timeRecordRepository.exists(timeRecordId)) {
+            throw new MarsException(HttpStatus.NOT_FOUND, "Object not found for id " + timeRecordId);
+        }
         timeRecordRepository.updateEndTimeRecord(timeRecordId, endTime);
-        return timeRecordRepository.findById(timeRecordId);
+        return timeRecordRepository.findOne(timeRecordId);
     }
 
     @Override
     public TimeRecordEntity updateStartTimeRecord(String timeRecordId, Date startTime) throws MarsException {
-//        TimeRecordEntity recordEntity = timeRecordRepository.findById(timeRecordId);
-//        if (recordEntity == null) {
-//            throw new MarsException(HttpStatus.NOT_FOUND, "Object not found for id " + timeRecordId);
-//        }
+        if (!timeRecordRepository.exists(timeRecordId)) {
+            throw new MarsException(HttpStatus.NOT_FOUND, "Object not found for id " + timeRecordId);
+        }
         timeRecordRepository.updateStartTimeRecord(timeRecordId, startTime);
-        return timeRecordRepository.findById(timeRecordId);
+        return timeRecordRepository.findOne(timeRecordId);
     }
 
     @Override
     public TimeRecordEntity updateActivityRecord(String timeRecordId, String activityId) throws MarsException {
-//        TimeRecordEntity recordEntity = timeRecordRepository.findById(timeRecordId);
-//        if (recordEntity == null) {
-//            throw new MarsException(HttpStatus.NOT_FOUND, "Object not found for id " + timeRecordId);
-//        }
+        if (!timeRecordRepository.exists(timeRecordId)) {
+            throw new MarsException(HttpStatus.NOT_FOUND, "Object not found for id " + timeRecordId);
+        }
         timeRecordRepository.updateActivityRecord(timeRecordId, activityId);
-        return timeRecordRepository.findById(timeRecordId);
+        return timeRecordRepository.findOne(timeRecordId);
     }
 }

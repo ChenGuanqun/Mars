@@ -15,11 +15,11 @@ import java.util.List;
 /**
  * Created by tachen on 5/18/2017.
  */
-public interface TimeRecordRepository extends CrudRepository<TimeRecordEntity, Long> {
+public interface TimeRecordRepository extends CrudRepository<TimeRecordEntity, String> {
 
-    @Query("select a from #{#entityName} a where a.id=?1")
-    @Transactional
-    TimeRecordEntity findById(String id);
+//    @Query("select a from #{#entityName} a where a.id=?1")
+//    @Transactional
+//    TimeRecordEntity findById(String id);
 
     @Modifying
     @Query("update #{#entityName} a set endTime=?2 where a.id=?1")

@@ -7,6 +7,7 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mars.common.ParamConstants;
 import com.mars.dao.entity.ActivityEntity;
@@ -34,6 +35,7 @@ import org.springframework.web.context.WebApplicationContext;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 /**
@@ -143,20 +145,29 @@ public class TimeRecordControllerTests {
     @Test
     public void t4_updateEndTimeRecord() throws Exception {
         Date endTime = new Date();
+        String expectedTime = new ObjectMapper().writeValueAsString(endTime);
+        expectedTime = expectedTime.substring(0,expectedTime.length()-3) + "000";
         MvcResult mvcResult = this.mockMvc.perform(patch("/api/timeRecords/" + timeRecordId + "/endTime").session(session).contentType(
             MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(endTime))
             .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print()).andExpect(status().isOk())
-            .andExpect(jsonPath("$.endTime").value(new ObjectMapper().writeValueAsString(endTime))).andReturn();
+            .andExpect(jsonPath("$.endTime").value(expectedTime)).andReturn();
+
+        Thread.sleep(2000);
     }
 
     @Test
     public void t5_updateEndTimeRecord() throws Exception {
         Date endTime = new Date();
+        String expectedTime = new ObjectMapper().writeValueAsString(endTime);
+        expectedTime = expectedTime.substring(0,expectedTime.length()-3) + "000";
         MvcResult mvcResult = this.mockMvc.perform(patch("/api/timeRecords/" + timeRecordId + "/endTime").session(session).contentType(
             MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(endTime))
             .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print()).andExpect(status().isOk())
-            .andExpect(jsonPath("$.endTime").value(new ObjectMapper().writeValueAsString(endTime))).andReturn();
+            .andExpect(jsonPath("$.endTime").value(expectedTime)).andReturn();
     }
+
+
+
 }
