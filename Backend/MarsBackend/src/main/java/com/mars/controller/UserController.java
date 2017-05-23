@@ -1,6 +1,7 @@
 package com.mars.controller;
 
 import com.mars.common.ParamConstants;
+import com.mars.common.RedisSingleton;
 import com.mars.dao.entity.UserEntity;
 import com.mars.exception.MarsException;
 import com.mars.model.UserInfo;
@@ -10,6 +11,7 @@ import com.mars.service.UserService;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import redis.clients.jedis.Jedis;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -60,9 +62,8 @@ public class UserController {
             throws MarsException {
         UserEntity userEntity = userService.userLogon(userName, password);
         String token = (new BigInteger(130, random)).toString(32);
-        HttpSession httpSession = request.getSession();
-        httpSession.setAttribute(ParamConstants.SESSION_ID, token);
-        httpSession.setAttribute(ParamConstants.CURRENT_USER_ID,userEntity.getId());
+        Jedis jedis = RedisSingleton.getInstance();
+        jedis.set(token, "live", "NX","EX",(long)1800);
         response.setHeader(ParamConstants.X_AUTHENTICATED_TOKEN, token);
         return userEntity;
     }

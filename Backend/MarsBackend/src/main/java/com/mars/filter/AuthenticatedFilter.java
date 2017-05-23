@@ -1,6 +1,7 @@
 package com.mars.filter;
 
 import com.mars.common.ParamConstants;
+import com.mars.common.RedisSingleton;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.util.StringUtils;
@@ -44,14 +45,21 @@ public class AuthenticatedFilter implements Filter {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             String token = request.getHeader(ParamConstants.X_AUTHENTICATED_TOKEN);
-            HttpSession httpSession = request.getSession();
+            String status = RedisSingleton.getInstance().get(token);
+            if(status == null){
+                response.reset();
+                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"The token is invalid, it may be expired!");
+            }else if(status.equals("live")){
+                filterChain.doFilter(servletRequest, servletResponse);
+            }
+            /*HttpSession httpSession = request.getSession();
             String sessionId = (String) httpSession.getAttribute(ParamConstants.SESSION_ID);
             if (StringUtils.isEmpty(token) || !token.equals(sessionId)) {
                 response.reset();
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"The token is invalid, it may be expired!");
             }else {
                 filterChain.doFilter(servletRequest, servletResponse);
-            }
+            }*/
         }
     }
 
