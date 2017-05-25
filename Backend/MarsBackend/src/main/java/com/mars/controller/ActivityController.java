@@ -55,11 +55,6 @@ public class ActivityController {
     public List<ActivityEntity> getActivities(@RequestParam("userId") String userId,
         @RequestHeader(value = ParamConstants.X_AUTHENTICATED_TOKEN) String token, HttpServletRequest request) throws MarsException
     {
-        String currentUserId = (String) request.getSession().getAttribute(ParamConstants.CURRENT_USER_ID);
-        if (!currentUserId.equals(userId)) {
-            throw new MarsException(HttpStatus.UNAUTHORIZED, "The userId provided does not match your current logon userId!");
-        }
-
         return activityService.getAllActivities(userId);
     }
 
@@ -75,8 +70,7 @@ public class ActivityController {
     public ActivityEntity getActivity(@RequestHeader(value = ParamConstants.X_AUTHENTICATED_TOKEN) String token, @PathVariable String activityId,
         HttpServletRequest request) throws MarsException
     {
-        String currentUserId = (String) request.getSession().getAttribute(ParamConstants.CURRENT_USER_ID);
-        return activityService.getActivity(activityId, currentUserId);
+        return activityService.getActivity(activityId);
     }
 
 
@@ -106,8 +100,7 @@ public class ActivityController {
     public ActivityEntity deleteActivity(@RequestHeader(value = ParamConstants.X_AUTHENTICATED_TOKEN) String token, @PathVariable String activityId,
         HttpServletRequest request) throws MarsException
     {
-        String currentUserId = (String) request.getSession().getAttribute(ParamConstants.CURRENT_USER_ID);
-        return activityService.deleteActivity(activityId, currentUserId);
+        return activityService.deleteActivity(activityId);
     }
 
 }

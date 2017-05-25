@@ -1,5 +1,7 @@
 package com.mars.filter;
 
+import static ch.qos.logback.classic.ClassicConstants.REQUEST_METHOD;
+
 import com.mars.common.ParamConstants;
 import com.mars.common.RedisSingleton;
 
@@ -40,26 +42,18 @@ public class AuthenticatedFilter implements Filter {
         HttpServletRequest request = (HttpServletRequest) servletRequest;
         HttpServletResponse response = (HttpServletResponse) servletResponse;
         String path = request.getRequestURI().substring(request.getContextPath().length()).replaceAll("[/]+$", "");
-        boolean allowedPath = ALLOWED_PATHS.contains(path) ;
+        boolean allowedPath = ALLOWED_PATHS.contains(path) & request.getMethod().equals("POST");
+
         if (allowedPath) {
             filterChain.doFilter(servletRequest, servletResponse);
         } else {
             String token = request.getHeader(ParamConstants.X_AUTHENTICATED_TOKEN);
-            String status = RedisSingleton.getInstance().get(token);
-            if(status == null){
+            if(StringUtils.isEmpty(token) || RedisSingleton.getInstance().get(token) == null){
                 response.reset();
                 response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"The token is invalid, it may be expired!");
-            }else if(status.equals("live")){
+            }else if(RedisSingleton.getInstance().get(token).equals("live")){
                 filterChain.doFilter(servletRequest, servletResponse);
             }
-            /*HttpSession httpSession = request.getSession();
-            String sessionId = (String) httpSession.getAttribute(ParamConstants.SESSION_ID);
-            if (StringUtils.isEmpty(token) || !token.equals(sessionId)) {
-                response.reset();
-                response.sendError(HttpServletResponse.SC_UNAUTHORIZED,"The token is invalid, it may be expired!");
-            }else {
-                filterChain.doFilter(servletRequest, servletResponse);
-            }*/
         }
     }
 

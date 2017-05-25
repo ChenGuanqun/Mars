@@ -59,8 +59,6 @@ public class ActivityControllerTests {
 
     static String userId;
 
-    static MockHttpSession session;
-
     static ActivityEntity[] activityEntities;
 
     static String activityName = "activity-" + (new BigInteger(130, new SecureRandom())).toString(32);
@@ -94,7 +92,6 @@ public class ActivityControllerTests {
         String body = mvcResult.getResponse().getContentAsString();
         UserEntity user = new ObjectMapper().readValue(body, UserEntity.class);
         userId = user.getId();
-        session = (MockHttpSession) mvcResult.getRequest().getSession();
     }
 
 
@@ -107,7 +104,7 @@ public class ActivityControllerTests {
         activityInfo.setUserId(userId);
 
         MvcResult mvcResult = this.mockMvc
-            .perform(post("/api/activities").session(session).contentType(
+            .perform(post("/api/activities").contentType(
                 MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(activityInfo))
                 .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print())
@@ -127,7 +124,7 @@ public class ActivityControllerTests {
         activityUpdateInfo.setDescription(activityDesModify);
 
         MvcResult mvcResult = this.mockMvc
-            .perform(patch("/api/activities").session(session).contentType(
+            .perform(patch("/api/activities").contentType(
                 MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(activityUpdateInfo))
                 .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print())
@@ -139,7 +136,7 @@ public class ActivityControllerTests {
     @Test
     public void t4_getActivity() throws Exception {
         MvcResult mvcResult = this.mockMvc
-            .perform(get("/api/activities/" + activityId).session(session)
+            .perform(get("/api/activities/" + activityId)
                 .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print())
             .andExpect(status().isOk())
@@ -154,7 +151,7 @@ public class ActivityControllerTests {
     @Test
     public void t5_deleteActivity() throws Exception {
         MvcResult mvcResult = this.mockMvc
-            .perform(delete("/api/activities/" + activityId).session(session)
+            .perform(delete("/api/activities/" + activityId)
                 .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print())
             .andExpect(status().isOk())
@@ -163,26 +160,49 @@ public class ActivityControllerTests {
     }
 
     @Test
-    public void t6_getActivitiesWithoutJSESSIONID() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/api/activities").param("userId", userId)
-            .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
+    public void t6_getActivitiesWithTokenEmpty() throws Exception {
+        this.mockMvc.perform(get("/api/activities").param("userId", userId)
+                        .header(ParamConstants.X_AUTHENTICATED_TOKEN, "abc"))
+        .andDo(print()).andExpect(status().isUnauthorized()).andReturn();
+
+        this.mockMvc.perform(get("/api/activities").param("userId", userId)
+            .header(ParamConstants.X_AUTHENTICATED_TOKEN, ""))
             .andDo(print()).andExpect(status().isUnauthorized()).andReturn();
     }
 
     @Test
     public void t7_getActivitiesWithoutToken() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/api/activities").session(session).param("userId", userId))
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/activities").param("userId", userId))
             //            .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print()).andExpect(status().isUnauthorized()).andReturn();
     }
 
     @Test
-    public void t9_getActivities() throws Exception {
-        MvcResult mvcResult = this.mockMvc.perform(get("/api/activities").session(session).param("userId", userId)
+    public void t8_getActivities() throws Exception {
+        MvcResult mvcResult = this.mockMvc.perform(get("/api/activities").param("userId", userId)
             .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print()).andExpect(status().isOk()).andReturn();
         String body = mvcResult.getResponse().getContentAsString();
         activityEntities = new ObjectMapper().readValue(body, ActivityEntity[].class);
         System.out.println("The number of activities : " + activityEntities.length);
+    }
+
+    @Test
+    public void t90_closeSession() throws  Exception{
+        this.mockMvc.perform(delete("/api/users/session").header(ParamConstants.X_AUTHENTICATED_TOKEN, "123"))
+            .andDo(print()).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    public void t91_closeSession() throws  Exception{
+        this.mockMvc.perform(delete("/api/users/session").header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
+            .andDo(print()).andExpect(status().isOk());
+    }
+
+    @Test
+    public void t92_getActivitiesAfterSessionClosed() throws Exception {
+        this.mockMvc.perform(get("/api/activities").param("userId", userId)
+            .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
+            .andDo(print()).andExpect(status().isUnauthorized());
     }
 }

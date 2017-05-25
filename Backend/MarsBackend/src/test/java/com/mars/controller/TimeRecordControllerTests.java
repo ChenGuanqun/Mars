@@ -1,5 +1,6 @@
 package com.mars.controller;
 
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -63,7 +64,6 @@ public class TimeRecordControllerTests {
 
     static String userId;
 
-    static MockHttpSession session;
 
     static String activityId;
 
@@ -87,7 +87,6 @@ public class TimeRecordControllerTests {
         String body = mvcResult.getResponse().getContentAsString();
         UserEntity user = new ObjectMapper().readValue(body, UserEntity.class);
         userId = user.getId();
-        session = (MockHttpSession) mvcResult.getRequest().getSession();
     }
 
     @Test
@@ -98,7 +97,7 @@ public class TimeRecordControllerTests {
         activityInfo.setUserId(userId);
 
         MvcResult mvcResult = this.mockMvc
-            .perform(post("/api/activities").session(session).contentType(
+            .perform(post("/api/activities").contentType(
                 MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(activityInfo))
                 .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print())
@@ -131,7 +130,7 @@ public class TimeRecordControllerTests {
         timeRecordInfo.setUserId(userId);
         timeRecordInfo.setActivityId(activityId);
         timeRecordInfo.setStartTime(startTime);
-        MvcResult mvcResult = this.mockMvc.perform(post("/api/timeRecords").session(session).contentType(
+        MvcResult mvcResult = this.mockMvc.perform(post("/api/timeRecords").contentType(
             MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(timeRecordInfo))
             .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print()).andExpect(status().isOk())
@@ -147,7 +146,7 @@ public class TimeRecordControllerTests {
         Date endTime = new Date();
         String expectedTime = new ObjectMapper().writeValueAsString(endTime);
         expectedTime = expectedTime.substring(0,expectedTime.length()-3) + "000";
-        MvcResult mvcResult = this.mockMvc.perform(patch("/api/timeRecords/" + timeRecordId + "/endTime").session(session).contentType(
+        MvcResult mvcResult = this.mockMvc.perform(patch("/api/timeRecords/" + timeRecordId + "/endTime").contentType(
             MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(endTime))
             .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print()).andExpect(status().isOk())
@@ -161,7 +160,7 @@ public class TimeRecordControllerTests {
         Date endTime = new Date();
         String expectedTime = new ObjectMapper().writeValueAsString(endTime);
         expectedTime = expectedTime.substring(0,expectedTime.length()-3) + "000";
-        MvcResult mvcResult = this.mockMvc.perform(patch("/api/timeRecords/" + timeRecordId + "/endTime").session(session).contentType(
+        MvcResult mvcResult = this.mockMvc.perform(patch("/api/timeRecords/" + timeRecordId + "/endTime").contentType(
             MediaType.APPLICATION_JSON).content(new ObjectMapper().writeValueAsString(endTime))
             .header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
             .andDo(print()).andExpect(status().isOk())
@@ -169,5 +168,9 @@ public class TimeRecordControllerTests {
     }
 
 
-
+    @Test
+    public void t6_closeSession() throws  Exception{
+        this.mockMvc.perform(delete("/api/users/session").header(ParamConstants.X_AUTHENTICATED_TOKEN, token))
+            .andDo(print()).andExpect(status().isOk());
+    }
 }
