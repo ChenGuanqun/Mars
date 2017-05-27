@@ -4,6 +4,7 @@ import com.mars.common.ParamConstants;
 import com.mars.common.RedisSingleton;
 import com.mars.dao.entity.UserEntity;
 import com.mars.exception.MarsException;
+import com.mars.model.ProfileImageInfo;
 import com.mars.model.UserInfo;
 
 import com.mars.service.UserService;
@@ -72,7 +73,7 @@ public class UserController {
     }
 
     @RequestMapping(method = RequestMethod.DELETE, path = "/session")
-    @ApiOperation(value = "Create a user session", notes = "Create a user session")
+    @ApiOperation(value = "Close a user session", notes = "Close a user session")
     @ApiResponses(value = {
         @ApiResponse(code = 200, message = "Success", response = UserEntity.class),
         @ApiResponse(code = 401, message = "Unauthorized"),
@@ -90,5 +91,22 @@ public class UserController {
             throw new MarsException(HttpStatus.NOT_FOUND, "The token " + token + "not found");
         }
         return "The session has been close!";
+    }
+
+
+    @RequestMapping(method = RequestMethod.POST, path = "/{userId}/profileImage")
+    @ApiOperation(value = "Create a user profileImage", notes = "Create a user profileImage")
+    @ApiResponses(value = {
+        @ApiResponse(code = 200, message = "Success", response = UserEntity.class),
+        @ApiResponse(code = 401, message = "Unauthorized"),
+        @ApiResponse(code = 403, message = "Forbidden"),
+        @ApiResponse(code = 404, message = "Not Found"),
+        @ApiResponse(code = 500, message = "Failure") })
+    public
+    @ResponseBody
+    UserEntity createUserImage(@RequestBody ProfileImageInfo image, @RequestHeader(value = ParamConstants.X_AUTHENTICATED_TOKEN) String token)
+        throws MarsException
+    {
+        return null;
     }
 }
